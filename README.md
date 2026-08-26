@@ -34,7 +34,8 @@ users.users.YOUR_USER.extraGroups = [ "input" ];
 
 Log out and back in after changing groups.
 
-### Other retarded Linux distributions
+
+### non-nix Linux distributions
 
 Install Quickshell through your distro first, then install `wpm_rt` with Cargo:
 
