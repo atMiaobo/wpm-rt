@@ -1,14 +1,14 @@
 # wpm_rt
 
-Live system-wide WPM monitor for Hyprland. A tiny Quickshell overlay appears while you type and fades out after a short idle timeout.
-
-The monitor reads Linux input events and emits only aggregate typing speed. It does not store or print key names.
+Live system-wide WPM monitor for Hyprland. Tiny quick-shell overlay monitor to track your wpm real time. 
 
 ## Quick start
 
 ```bash
+sudo setfacl -m u:$USER:r /dev/input/event*
 nix run path:.
 ```
+add in config for permanence.
 
 Once the repo is committed, `nix run .` works too.
 
