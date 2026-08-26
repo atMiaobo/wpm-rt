@@ -47,7 +47,9 @@ cargo run -- devices
 wpm = chars_per_second * 60 / 4.8
 ```
 
-The default rolling window is `2000ms`; the overlay hides after `900ms` without typing.
+The default rolling window is `2000ms`, with a `1000ms` minimum denominator at the start of a burst so the first few keys do not inflate the reading. The overlay hides after `900ms` without typing.
+
+Letter keys pressed while Ctrl, Alt, or Super are held are ignored so common shortcuts do not count as typing.
 
 Daemon options:
 

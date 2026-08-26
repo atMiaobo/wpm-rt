@@ -1,4 +1,4 @@
-use std::collections::VecDeque;
+use std::collections::{HashSet, VecDeque};
 use std::env;
 use std::fs::{self, File};
 use std::io::{self, Read, Write};
@@ -13,6 +13,7 @@ const KEY_1: u16 = 2;
 const KEY_0: u16 = 11;
 const KEY_BACKSPACE: u16 = 14;
 const KEY_TAB: u16 = 15;
+const KEY_LEFTCTRL: u16 = 29;
 const KEY_Q: u16 = 16;
 const KEY_P: u16 = 25;
 const KEY_ENTER: u16 = 28;
@@ -32,6 +33,11 @@ const KEY_BACKSLASH: u16 = 43;
 const KEY_COMMA: u16 = 51;
 const KEY_DOT: u16 = 52;
 const KEY_SLASH: u16 = 53;
+const KEY_LEFTALT: u16 = 56;
+const KEY_LEFTMETA: u16 = 125;
+const KEY_RIGHTMETA: u16 = 126;
+const KEY_RIGHTCTRL: u16 = 97;
+const KEY_RIGHTALT: u16 = 100;
 
 #[derive(Clone, Copy, Debug)]
 struct Config {
@@ -236,6 +242,7 @@ fn has_key(bitmap: &[u64], code: u16) -> bool {
 fn read_input_device(path: &Path, tx: mpsc::Sender<KeyPress>) -> io::Result<()> {
     let mut file = File::open(path)?;
     let mut event = [0_u8; 24];
+    let mut shortcut_modifiers_down = HashSet::new();
 
     loop {
         file.read_exact(&mut event)?;
@@ -243,12 +250,29 @@ fn read_input_device(path: &Path, tx: mpsc::Sender<KeyPress>) -> io::Result<()> 
         let code = u16::from_ne_bytes([event[18], event[19]]);
         let value = i32::from_ne_bytes([event[20], event[21], event[22], event[23]]);
 
-        if event_type == EV_KEY && value == 1 && is_typing_key(code) {
-            if tx.send(KeyPress { at: Instant::now() }).is_err() {
-                return Ok(());
+        if event_type == EV_KEY {
+            if is_shortcut_modifier(code) {
+                if value == 0 {
+                    shortcut_modifiers_down.remove(&code);
+                } else {
+                    shortcut_modifiers_down.insert(code);
+                }
+            }
+
+            if value == 1 && shortcut_modifiers_down.is_empty() && is_typing_key(code) {
+                if tx.send(KeyPress { at: Instant::now() }).is_err() {
+                    return Ok(());
+                }
             }
         }
     }
+}
+
+fn is_shortcut_modifier(code: u16) -> bool {
+    matches!(
+        code,
+        KEY_LEFTCTRL | KEY_RIGHTCTRL | KEY_LEFTALT | KEY_RIGHTALT | KEY_LEFTMETA | KEY_RIGHTMETA
+    )
 }
 
 fn is_typing_key(code: u16) -> bool {
@@ -289,7 +313,7 @@ fn emit_stats(rx: Receiver<KeyPress>, config: Config) -> io::Result<()> {
                 last_active = key.at;
                 events.push_back(key.at);
                 drain_old(&mut events, key.at, config.window);
-                write_stats(&mut stdout, &events, config, true)?;
+                write_stats(&mut stdout, &events, config, key.at, true)?;
                 was_active = true;
             }
             Err(mpsc::RecvTimeoutError::Timeout) => {
@@ -298,11 +322,11 @@ fn emit_stats(rx: Receiver<KeyPress>, config: Config) -> io::Result<()> {
                 let active = now.duration_since(last_active) <= config.idle_timeout;
 
                 if active && !events.is_empty() {
-                    write_stats(&mut stdout, &events, config, true)?;
+                    write_stats(&mut stdout, &events, config, now, true)?;
                     was_active = true;
                 } else if was_active {
                     events.clear();
-                    write_stats(&mut stdout, &events, config, false)?;
+                    write_stats(&mut stdout, &events, config, now, false)?;
                     was_active = false;
                 }
             }
@@ -325,11 +349,15 @@ fn write_stats(
     writer: &mut impl Write,
     events: &VecDeque<Instant>,
     config: Config,
+    now: Instant,
     active: bool,
 ) -> io::Result<()> {
-    let cps = if events.len() >= 2 {
-        let span = events.back().unwrap().duration_since(*events.front().unwrap());
-        let seconds = span.as_secs_f64().max(0.25);
+    let cps = if let Some(first) = events.front() {
+        let span = now.duration_since(*first);
+        let seconds = span
+            .as_secs_f64()
+            .max(1.0)
+            .min(config.window.as_secs_f64());
         events.len() as f64 / seconds
     } else {
         0.0
