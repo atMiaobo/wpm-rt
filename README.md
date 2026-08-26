@@ -9,7 +9,7 @@ seconds = clamp(now - first_key_in_window, min = 1.0s, max = 2.0s)
     cps = key_count_in_window / seconds
     wpm = cps * 60 / 4.8
 
-Basically every active 100ms map active typing time to 1 or 2s depending on which is closer and calculate wpm by dividing by 4.8 -aka average word length in English, tailored specifically for everyday peasant output. change to like 5 or smtht for academic writing.
+Basically every active 100ms map active typing time to 1s if t<1s and 2s if t>2s, otherwise stay the same. Then calculate wpm by dividing by 4.8 -aka average word length in English, tailored specifically for everyday peasant output. change to like 5 or smtht for academic writing.
 
 
 
