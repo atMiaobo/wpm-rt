@@ -16,6 +16,8 @@ Basically every active 100ms map active typing time to 1s if t<1s and 2s if t>2s
 
 ## Quick start
 
+### Nix / NixOS
+
 ```bash
 sudo setfacl -m u:$USER:r /dev/input/event*
 nix run path:.
@@ -32,6 +34,32 @@ users.users.YOUR_USER.extraGroups = [ "input" ];
 
 Log out and back in after changing groups.
 
+### Other retarded Linux distributions
+
+Install Quickshell through your distro first, then install `wpm_rt` with Cargo:
+
+```bash
+cargo install --git https://github.com/YOUR_USER/wpm_rt
+```
+
+Grant your user input-device access:
+
+```bash
+sudo usermod -aG input "$USER"
+```
+
+Log out and back in, then run:
+
+```bash
+wpm-rt-shell
+```
+
+For Hyprland autostart, add this to `~/.config/hypr/hyprland.conf`:
+
+```ini
+exec-once = wpm-rt-shell
+```
+
 ## Development
 
 ```bash
@@ -43,6 +71,12 @@ You can test the daemon without the overlay:
 
 ```bash
 cargo run -- stream
+```
+
+You can run the Cargo-installed style launcher locally:
+
+```bash
+cargo run --bin wpm-rt-shell
 ```
 
 List readable keyboard-like devices:

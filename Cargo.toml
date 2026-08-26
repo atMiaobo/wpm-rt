@@ -7,3 +7,7 @@ license = "MIT"
 [[bin]]
 name = "wpm-rt"
 path = "src/main.rs"
+
+[[bin]]
+name = "wpm-rt-shell"
+path = "src/shell.rs"
