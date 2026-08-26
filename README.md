@@ -66,6 +66,47 @@ For Hyprland autostart, add this to `~/.config/hypr/hyprland.conf`:
 exec-once = wpm-rt-shell
 ```
 
+## CLI
+
+Launch the Quickshell overlay:
+
+```bash
+wpm-rt-shell
+```
+
+Run the daemon directly and print live samples:
+
+```bash
+wpm-rt stream
+```
+
+Open the localhost stats dashboard:
+
+```bash
+wpm-rt stats
+```
+
+List readable keyboard-like input devices:
+
+```bash
+wpm-rt devices
+```
+
+From a local Nix checkout, use:
+
+```bash
+nix run path:.
+nix run path:.#daemon -- stream
+nix run path:.#daemon -- stats
+nix run path:.#daemon -- devices
+```
+
+Daemon options:
+
+```bash
+wpm-rt stream --window-ms 2000 --idle-ms 900 --word-len 4.8
+```
+
 ## Development
 
 ```bash
@@ -93,9 +134,3 @@ cargo run -- devices
 
 
 Letter keys pressed while Ctrl, Alt, or Super are held are ignored so common shortcuts do not count as typing.
-
-Daemon options:
-
-```bash
-wpm-rt stream --window-ms 2000 --idle-ms 900 --word-len 4.8
-```
