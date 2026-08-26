@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export WPM_RT_DEV=1
+cargo build
+
+tmp_qml="$(mktemp -t wpm-rt-shell.XXXXXX.qml)"
+trap 'rm -f "$tmp_qml"' EXIT
+
+sed "s|@wpmRtBin@|$(pwd)/target/debug/wpm-rt|g" quickshell/shell.qml > "$tmp_qml"
+exec quickshell -p "$tmp_qml"

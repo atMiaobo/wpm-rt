@@ -1,0 +1,9 @@
+[package]
+name = "wpm-rt"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[[bin]]
+name = "wpm-rt"
+path = "src/main.rs"
