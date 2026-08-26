@@ -3,6 +3,11 @@
 Live system-wide WPM monitor for Hyprland. Tiny quick-shell overlay monitor to track your wpm real time. 
 
 
+
+https://github.com/user-attachments/assets/8a270a0c-ca91-4307-9fe3-82c4baecb7ce
+
+
+
 ## Instantaneous wpm estimation calculus larp formula:
 Every active 100ms compute:
 seconds = clamp(now - first_key_in_window, min = 1.0s, max = 2.0s)
