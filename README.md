@@ -1,4 +1,4 @@
-# wpm_rt
+# wpm-rt
 
 Live system-wide WPM monitor for Hyprland. Tiny quick-shell overlay monitor to track your wpm real time. 
 
