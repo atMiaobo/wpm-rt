@@ -4,7 +4,6 @@ Live system-wide WPM monitor for Hyprland. Tiny quick-shell overlay monitor to t
 
 
 watch demo
-
 https://github.com/user-attachments/assets/8a270a0c-ca91-4307-9fe3-82c4baecb7ce
 
 
