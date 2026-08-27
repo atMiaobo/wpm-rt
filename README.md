@@ -7,6 +7,9 @@ Live system-wide WPM monitor for Hyprland. Tiny quick-shell overlay monitor to t
 https://github.com/user-attachments/assets/8a270a0c-ca91-4307-9fe3-82c4baecb7ce
 
 
+Inspect your stats: wpm-rt stats:
+<img width="2532" height="1507" alt="image" src="https://github.com/user-attachments/assets/46aca74c-2e2b-41a3-99e2-91b75dbf57a2" />
+
 
 ## Instantaneous wpm estimation calculus larp formula:
 Every active 100ms compute:
