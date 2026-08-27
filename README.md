@@ -3,7 +3,7 @@
 Live system-wide WPM monitor for Hyprland. Tiny quick-shell overlay monitor to track your wpm real time. Started as a 1h programming challenge commissioned by a skeptical Japanese friend -since my typing speed is easily in the triple digits, finished in 14.2 minutes.
 
 
-
+watch demo
 https://github.com/user-attachments/assets/8a270a0c-ca91-4307-9fe3-82c4baecb7ce
 
 
