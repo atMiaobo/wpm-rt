@@ -49,7 +49,7 @@ Log out and back in after changing groups.
 Install Quickshell through your distro first, then install `wpm_rt` with Cargo:
 
 ```bash
-cargo install --git https://github.com/YOUR_USER/wpm_rt
+cargo install --git https://github.com/atMiaobo/wpm-rt.git
 ```
 
 Grant your user input-device access:
